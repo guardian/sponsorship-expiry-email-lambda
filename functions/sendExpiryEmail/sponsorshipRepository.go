@@ -6,6 +6,7 @@ import (
 	"time"
 	"strconv"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	"sort"
 )
 
 
@@ -30,6 +31,12 @@ type ImageAsset struct {
 	Height int64
 	MimeType string
 }
+
+type ByExpiry []Sponsorship
+
+func (a ByExpiry) Len() int           { return len(a) }
+func (a ByExpiry) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByExpiry) Less(i, j int) bool { return a[i].ValidTo < a[j].ValidTo }
 
 func asDynamoDate(t time.Time) *dynamodb.AttributeValue {
 	return &dynamodb.AttributeValue{N: aws.String(strconv.FormatInt(t.Unix() * 1000, 10)) }
@@ -99,9 +106,23 @@ func loadSponsorships(query *dynamodb.ScanInput, dynamo *dynamodb.DynamoDB) ([]S
 }
 
 func LoadExpiringSoon(dynamo *dynamodb.DynamoDB) ([]Sponsorship, error) {
-	return loadSponsorships(expiringSoonQuery(), dynamo)
+	spons, err := loadSponsorships(expiringSoonQuery(), dynamo)
+
+	if (err != nil) {
+		return nil, err
+	}
+	sort.Sort(ByExpiry(spons))
+
+	return spons, nil
 }
 
 func LoadExpiredRecently(dynamo *dynamodb.DynamoDB) ([]Sponsorship, error) {
-	return loadSponsorships(expiredRecentlyQuery(), dynamo)
+	spons, err := loadSponsorships(expiredRecentlyQuery(), dynamo)
+
+	if (err != nil) {
+		return nil, err
+	}
+	sort.Sort(sort.Reverse(ByExpiry(spons)))
+
+	return spons, nil
 }
