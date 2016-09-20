@@ -4,11 +4,12 @@ import (
 	//"github.com/apex/go-apex"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/aws/aws-sdk-go/service/ses"
 	"github.com/aws/aws-sdk-go/aws"
 	"html/template"
-	"os"
 	"time"
 	"fmt"
+	"bytes"
 )
 
 const emailTemplate = `
@@ -16,29 +17,37 @@ const emailTemplate = `
 <html>
 	<body>
 		<h3>Expiring sponsorships</h3>
-		{{range .Expiring}}
-			<div>
-			<span>{{with $asset := index .SponsorLogo.Assets 0}}<img src="{{$asset.ImageUrl}}"/>{{end}}</span>
-			<span>
-				{{.SponsorshipType}}<br />
-				Sponsor: <a href="https://tagmanager.gutools.co.uk/sponsorship/{{.Id}}">{{.SponsorName}}</a><br />
-				Expires: {{formatMillisDate .ValidTo}}
-			</span>
-			</div>
+		{{if .Expiring}}
+			<table>
+				{{range .Expiring}}
+					<tr>
+					<td>{{with $asset := index .SponsorLogo.Assets 0}}<img src="{{$asset.ImageUrl}}"/>{{end}}</td>
+					<td>
+						{{.SponsorshipType}}<br />
+						Sponsor: <a href="https://tagmanager.gutools.co.uk/sponsorship/{{.Id}}">{{.SponsorName}}</a><br />
+						Expires: {{formatMillisDate .ValidTo}}
+					</td>
+					</tr>
+				{{end}}
+			</table>
 		{{else}}
 			<p>no sponsorships expiring in the next 7 days</p>
 		{{end}}
 
 		<h3>Expired sponsorships</h3>
-		{{range .Expired}}
-			<div>
-			<span>{{with $asset := index .SponsorLogo.Assets 0}}<img src="{{$asset.ImageUrl}}"/>{{end}}</span>
-			<span>
-				{{.SponsorshipType}}<br />
-				Sponsor: <a href="https://tagmanager.gutools.co.uk/sponsorship/{{.Id}}">{{.SponsorName}}</a><br />
-				Expired: {{formatMillisDate .ValidTo}}
-			</span>
-			</div>
+		{{if .Expiring}}
+			<table>
+				{{range .Expiring}}
+					<tr>
+					<td>{{with $asset := index .SponsorLogo.Assets 0}}<img src="{{$asset.ImageUrl}}"/>{{end}}</td>
+					<td>
+						{{.SponsorshipType}}<br />
+						Sponsor: <a href="https://tagmanager.gutools.co.uk/sponsorship/{{.Id}}">{{.SponsorName}}</a><br />
+						Expired: {{formatMillisDate .ValidTo}}
+					</td>
+					</tr>
+				{{end}}
+			</table>
 		{{else}}
 			<p>no sponsorships expired in the last 7 days</p>
 		{{end}}
@@ -50,9 +59,12 @@ func formatMillisDate(millis int64) string {
 }
 
 func main() {
-	dynamo := dynamodb.New(session.New(&aws.Config{
+	awsSession := session.New(&aws.Config{
 		Region: aws.String("eu-west-1"),
-	}))
+	})
+
+	dynamo := dynamodb.New(awsSession)
+	ses := ses.New(awsSession)
 
 	expiring, err := LoadExpiringSoon(dynamo)
 
@@ -76,7 +88,15 @@ func main() {
 		Expired: expired,
 	}
 
-	err = t.Execute(os.Stdout, templateData)
+	messageBuffer := new(bytes.Buffer)
+	err = t.Execute(messageBuffer, templateData)
+
+
+	if (err != nil) {
+		fmt.Println(err.Error())
+	}
+
+	err = sendEmail(messageBuffer.String(), ses)
 
 	if (err != nil) {
 		fmt.Println(err.Error())
