@@ -48,7 +48,7 @@ func expiringSoonQuery() *dynamodb.ScanInput {
 	nowPlus7 := time.Now().Add(plus7)
 
 	return &dynamodb.ScanInput{
-		TableName: aws.String("tag-manager-sponsorships-CODE"),
+		TableName: aws.String("tag-manager-sponsorships-PROD"),
 		FilterExpression: aws.String("validTo BETWEEN :from AND :to AND #stat = :stat"),
 		ExpressionAttributeNames: map[string]*string{"#stat" : aws.String("status")},
 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
@@ -65,7 +65,7 @@ func expiredRecentlyQuery() *dynamodb.ScanInput {
 	nowMinus7 := time.Now().Add(minus7)
 
 	return &dynamodb.ScanInput{
-		TableName: aws.String("tag-manager-sponsorships-CODE"),
+		TableName: aws.String("tag-manager-sponsorships-PROD"),
 		FilterExpression: aws.String("validTo BETWEEN :from AND :to AND #stat = :stat"),
 		ExpressionAttributeNames: map[string]*string{"#stat" : aws.String("status")},
 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
