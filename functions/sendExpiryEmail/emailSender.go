@@ -13,15 +13,18 @@ func sendEmail(messageBody string, sesClient *ses.SES) error {
 	params := &ses.SendEmailInput{
 		Destination: &ses.Destination{
 			ToAddresses: []*string{
-				aws.String("stephen.wells@guardian.co.uk"),
-				//aws.String("kelvin.chappell@theguardian.com"),
-				//aws.String("robert.freeman@guardian.co.uk"),
-				//aws.String("shraddha.pande@theguardian.com"),
+				aws.String("graham.hayday@theguardian.com"),
+				aws.String("stephen.tolfree@theguardian.com"),
+				aws.String("emma.wevill@theguardian.com"),
+				aws.String("tim.hughes@theguardian.com"),
+				aws.String("marcus.browne@theguardian.com"),
+				aws.String("matthew.caines@theguardian.com"),
+				aws.String("guardian.adops@theguardian.com"),
 			},
-			//CcAddresses: []*string{
-			//	aws.String("commercial.dev@theguardian.com"),
-			//
-			//},
+			CcAddresses: []*string{
+				aws.String("commercial.dev@theguardian.com"),
+
+			},
 		},
 		Message: &ses.Message{
 			Body: &ses.Body{
