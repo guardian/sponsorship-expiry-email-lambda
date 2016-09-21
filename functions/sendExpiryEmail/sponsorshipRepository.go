@@ -18,6 +18,7 @@ type Sponsorship struct {
 	SponsorshipType string
 	SponsorName string
 	SponsorLogo Image
+	Tags []int64
 }
 
 type Image struct {

@@ -13,8 +13,15 @@ func sendEmail(messageBody string, sesClient *ses.SES) error {
 	params := &ses.SendEmailInput{
 		Destination: &ses.Destination{
 			ToAddresses: []*string{
-				aws.String("steppenwells@gmail.com"),
+				aws.String("stephen.wells@guardian.co.uk"),
+				//aws.String("kelvin.chappell@theguardian.com"),
+				//aws.String("robert.freeman@guardian.co.uk"),
+				//aws.String("shraddha.pande@theguardian.com"),
 			},
+			//CcAddresses: []*string{
+			//	aws.String("commercial.dev@theguardian.com"),
+			//
+			//},
 		},
 		Message: &ses.Message{
 			Body: &ses.Body{
@@ -26,7 +33,7 @@ func sendEmail(messageBody string, sesClient *ses.SES) error {
 				Data:    aws.String("Expiring Advertisement Features " + date),
 			},
 		},
-		Source: aws.String("stephen.wells@guardian.co.uk"),
+		Source: aws.String("commercial.dev@theguardian.com"),
 	}
 
 	_, err := sesClient.SendEmail(params)
