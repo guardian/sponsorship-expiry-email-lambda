@@ -20,6 +20,10 @@ func sendEmail(messageBody string, sesClient *ses.SES) error {
 				aws.String("marcus.browne@theguardian.com"),
 				aws.String("matthew.caines@theguardian.com"),
 				aws.String("guardian.adops@theguardian.com"),
+				aws.String("chloe.bureau.casual@guardian.co.uk"),
+				aws.String("hannah.shaw@guardian.co.uk "),
+				aws.String("charlotte.andaloro@guardian.co.uk"),
+				aws.String("rachel.freeland@guardian.co.uk"),
 			},
 			CcAddresses: []*string{
 				aws.String("commercial.dev@theguardian.com"),
