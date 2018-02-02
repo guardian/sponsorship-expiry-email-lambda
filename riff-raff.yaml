@@ -1,0 +1,14 @@
+stacks:
+- flexible
+regions:
+- eu-west-1
+deployments:
+  sponsorship-expiry-email-lambda:
+    type: aws-lambda
+    parameters:
+      fileName: sponsorship-expiry-email-lambda.zip
+      bucket: sponsorship-expiry-email-lambda-dist
+      functions:
+        PROD:
+          name: sponsorship-expiry-email-lambda-PROD
+          filename: sponsorship-expiry-email-lambda.zip

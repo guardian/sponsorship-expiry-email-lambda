@@ -1,0 +1,96 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Sends a daily email of all expired and soon to be expiring sponsorships.
+
+Parameters:
+  Stage:
+    Description: Stage
+    Type: String
+    Default: PROD
+    AllowedValues:
+      - PROD
+  VpcId:
+    Description: 'ID of the VPC onto which to launch the application eg. vpc-1234abcd'
+    Type: AWS::EC2::VPC::Id
+    Default: vpc-381fa95d
+  FromAddress:
+    Description: Email address of the source of the email.
+    Type: String
+  ToAddresses:
+    Description: Destination email addresses.
+    Type: String
+  CcAddresses:
+    Description: CC email addresses.
+    Type: String
+
+Resources:
+  SponsorshipExpiryEmailLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: [ 'lambda.amazonaws.com' ]
+            Action: [ 'sts:AssumeRole' ]
+      Policies:
+          - PolicyName: LambdaPolicy
+            PolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Action: [ 'logs:CreateLogGroup', 'logs:CreateLogStream', 'logs:PutLogEvents', 'lambda:InvokeFunction' ]
+                  Resource: [ '*' ]
+                - Effect: Allow
+                  Action: [ 'ec2:CreateNetworkInterface', 'ec2:DescribeNetworkInterfaces', 'ec2:DeleteNetworkInterface' ]
+                  Resource: [ '*' ]
+                - Effect: Allow
+                  Action: [ 'dynamodb:Query*', 'dynamodb:Scan' ]
+                  Resource: [ 'arn:aws:dynamodb:*:*:table/tag-manager-sponsorships-*' ]
+                - Effect: Allow
+                  Action: [ 'ses:SendEmail' ]
+                  Resource: [ '*' ]
+
+
+  LambdaRule:
+    Type: AWS::Events::Rule
+    Properties:
+      ScheduleExpression: cron(0 7 ? * MON-FRI *)
+      Targets:
+        - Id: LambdaScheduler
+          Arn: !GetAtt [ Lambda, Arn ]
+
+  SponsorshipExpiryEmailLambdaSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+        GroupDescription: 'Lambda functions execute with this group'
+        VpcId: !Ref VpcId
+
+  Lambda:
+    Type : AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub sponsorship-expiry-email-lambda-${Stage}
+      Description: sponsorship-expiry-email-lambda-dist - sends a daily email of all expired and soon to be expiring emails.
+      Environment:
+        Variables:
+          toAddresses: !Ref ToAddresses
+          fromAddress: !Ref FromAddress
+          ccAddresses: !Ref CcAddresses
+      Code:
+        S3Bucket: sponsorship-expiry-email-lambda-dist
+        S3Key: !Sub flexible/${Stage}/sponsorship-expiry-email-lambda/sponsorship-expiry-email-lambda.zip
+      Handler : com.gu.comdev.sponsorshipexpiry.Lambda::handleRequest
+      MemorySize : 128
+      Role: !GetAtt SponsorshipExpiryEmailLambdaRole.Arn
+      Runtime : java8
+      Timeout : 180
+      VpcConfig:
+        SecurityGroupIds: [ !Ref SponsorshipExpiryEmailLambdaSecurityGroup ]
+        SubnetIds: [ 'subnet-c2620fa7', 'subnet-2a37bd5d', 'subnet-2967c870' ]
+
+  InvokeLambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt [ Lambda, Arn ]
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt [ LambdaRule, Arn ]
