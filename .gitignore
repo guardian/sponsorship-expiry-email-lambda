@@ -1,2 +1,7 @@
 .idea/
-sendExpiryEmail.zip
+.idea_modules/
+.DS_Store
+project/project
+logs/
+project/target
+target

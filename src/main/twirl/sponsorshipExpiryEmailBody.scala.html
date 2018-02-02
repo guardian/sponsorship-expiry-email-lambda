@@ -1,0 +1,51 @@
+@(expiringSponsorships: Seq[Sponsorship], expiredSponsorships: Seq[Sponsorship])
+
+@formatValidToDate(validToDate: Long) = @{
+    new DateTime(validToDate).toString(DateTimeFormat.forPattern("E, d MMM y HH:mm:ss Z"))
+}
+
+@generateTagManagerLink(s: Sponsorship) = @{
+    s.sponsorshipType match {
+        case "paidContent" => s.tags.headOption.map(tagId => s"https://tagmanager.gutools.co.uk/tag/$tagId").getOrElse("")
+        case _ => s"https://tagmanager.gutools.co.uk/sponsorship/${s.id}"
+    }
+}
+
+@generateTable(sponsorships: Seq[Sponsorship], noSponsorshipsMsg: String, validToLabel: String) = {
+@if(expiringSponsorships.nonEmpty) {
+    <table>
+    @for(s <- sponsorships) {
+        <tr>
+            <td><img src="@s.sponsorLogo.assets.headOption.map(asset => asset.imageUrl).getOrElse("")"/></td>
+            <td>
+                @s.sponsorshipType <br />
+                Sponsor: <a href="@generateTagManagerLink(s)">@s.sponsorName</a><br />
+                @validToLabel.capitalize: @formatValidToDate(s.validTo)
+            </td>
+        </tr>
+    }
+    </table>
+} else {
+    <p>@noSponsorshipsMsg.capitalize</p>
+}
+}
+
+<!DOCTYPE html>
+<html>
+    <body>
+        <h3>Expiring sponsorships</h3>
+        @generateTable(
+            expiringSponsorships,
+            noSponsorshipsMsg = "No sponsorships expiring in the next 7 days",
+            validToLabel = "Expiring"
+        )
+
+
+        <h3>Expired sponsorships</h3>
+        @generateTable(
+            expiredSponsorships,
+            noSponsorshipsMsg = "No sponsorships expired in the next 7 days",
+            validToLabel = "Expired"
+        )
+    </body>
+</html>
