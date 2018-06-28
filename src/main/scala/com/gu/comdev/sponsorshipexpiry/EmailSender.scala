@@ -30,7 +30,7 @@ object EmailSender {
       .withDestination(
         new Destination(toAddresses.asJava).withCcAddresses(ccAddresses.asJava)).withMessage(
           new Message()
-            .withSubject(new Content().withData("Expiring Advertisement Features " + date))
+            .withSubject(new Content().withData("Expiring Paid Content " + date))
             .withBody(new Body().withHtml(new Content().withData(emailBody)))).withSource(fromAddress)
 
     Try(sesClient.sendEmail(request)) match {
