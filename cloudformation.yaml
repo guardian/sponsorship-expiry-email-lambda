@@ -15,12 +15,14 @@ Parameters:
   FromAddress:
     Description: Email address of the source of the email.
     Type: String
+    Default: 'commercial.dev@guardian.co.uk'
   ToAddresses:
     Description: Destination email addresses.
     Type: String
   CcAddresses:
     Description: CC email addresses.
     Type: String
+    Default: 'commercial.dev@guardian.co.uk'
 
 Resources:
   SponsorshipExpiryEmailLambdaRole:
@@ -79,7 +81,7 @@ Resources:
         S3Bucket: sponsorship-expiry-email-lambda-dist
         S3Key: !Sub flexible/${Stage}/sponsorship-expiry-email-lambda/sponsorship-expiry-email-lambda.zip
       Handler : com.gu.comdev.sponsorshipexpiry.Lambda::handleRequest
-      MemorySize : 128
+      MemorySize : 512
       Role: !GetAtt SponsorshipExpiryEmailLambdaRole.Arn
       Runtime : java8
       Timeout : 180
