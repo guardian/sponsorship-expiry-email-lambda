@@ -69,7 +69,7 @@ Resources:
     Type : AWS::Lambda::Function
     Properties:
       FunctionName: !Sub sponsorship-expiry-email-lambda-${Stage}
-      Description: sponsorship-expiry-email-lambda-dist - sends a daily email of all expired and soon to be expiring emails.
+      Description: sponsorship-expiry-email-lambda-dist - sends a daily email of all expired and soon to be expiring sponsorships.
       Environment:
         Variables:
           toAddresses: !Ref ToAddresses
