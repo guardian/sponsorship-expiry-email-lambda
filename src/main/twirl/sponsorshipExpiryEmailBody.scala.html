@@ -12,7 +12,7 @@
 }
 
 @generateTable(sponsorships: Seq[Sponsorship], noSponsorshipsMsg: String, validToLabel: String) = {
-@if(expiringSponsorships.nonEmpty) {
+@if(sponsorships.nonEmpty) {
     <table>
     @for(s <- sponsorships) {
         <tr>
