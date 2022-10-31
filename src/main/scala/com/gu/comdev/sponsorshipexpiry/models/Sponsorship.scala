@@ -2,7 +2,7 @@ package com.gu.comdev.sponsorshipexpiry.models
 
 case class Sponsorship(
   id: Int,
-  validFrom: Long,
+  validFrom: Option[Long],
   validTo: Long,
   status: String,
   sponsorshipType: String,
