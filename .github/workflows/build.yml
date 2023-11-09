@@ -26,7 +26,7 @@ jobs:
 
     - name: Test and build
       run: |
-        sbt clean compile test
+        sbt clean compile test universal:packageBin
 
     - name: Upload to riff-raff
       uses: guardian/actions-riff-raff@v2
@@ -36,4 +36,4 @@ jobs:
         buildNumberOffset: 37 # This is the last build number from TeamCity
         contentDirectories: |
           sponsorship-expiry-email-lambda:
-          - target/scala-2.12/sponsorship-expiry-email-lambda.zip
+          - target/universal/sponsorship-expiry-email-lambda.zip
