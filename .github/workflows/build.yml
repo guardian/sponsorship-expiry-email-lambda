@@ -36,4 +36,4 @@ jobs:
         buildNumberOffset: 37 # This is the last build number from TeamCity
         contentDirectories: |
           sponsorship-expiry-email-lambda:
-          - sponsorship-expiry-email-lambda.zip
+          - target/scala*/sponsorship-expiry-email-lambda.zip
