@@ -1,0 +1,33 @@
+name: Build
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-java@v3
+      with:
+        distribution: 'corretto'
+        java-version: '8'
+        cache: 'sbt'
+    - name: test and build sbt
+        run: |
+          sbt clean compile test
+    - uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+        aws-region: eu-west-1
+    - uses: guardian/actions-riff-raff@v2
+        with:
+          configPath: riff-raff.yaml
+          projectName: Editorial Tools::sponsorship-expiry-email-lambda
+          buildNumberOffset: 37 # This is the last build number from TeamCity
+          contentDirectories: |
+            sponsorship-expiry-email-lambda:
+              - sponsorship-expiry-email-lambda.zip
