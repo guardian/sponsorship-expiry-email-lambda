@@ -4,7 +4,7 @@ scalaVersion  := "2.12.4"
 scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-target:jvm-1.8", "-Xfatal-warnings")
 name := "sponsorship-expiry-email-lambda"
 
-enablePlugins(SbtTwirl, JavaAppPackaging, RiffRaffArtifact)
+enablePlugins(SbtTwirl, JavaAppPackaging)
 
 val AwsSdkVersion = "1.12.329"
 
@@ -18,12 +18,6 @@ libraryDependencies ++= Seq(
 
  topLevelDirectory in Universal := None
  packageName in Universal := normalizedName.value
-
- riffRaffManifestProjectName := s"Editorial Tools::${name.value}"
- riffRaffPackageName := "sponsorship-expiry-email-lambda"
- riffRaffPackageType := (packageBin in Universal).value
- riffRaffUploadArtifactBucket := Option("riffraff-artifact")
- riffRaffUploadManifestBucket := Option("riffraff-builds")
 
 TwirlKeys.templateImports += "com.gu.comdev.sponsorshipexpiry.models._"
 TwirlKeys.templateImports += "org.joda.time.format.DateTimeFormat"
