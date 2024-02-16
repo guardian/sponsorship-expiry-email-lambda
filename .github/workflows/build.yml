@@ -19,20 +19,15 @@ jobs:
         java-version: '8'
         cache: 'sbt'
 
-    - name: AWS Auth
-      uses: aws-actions/configure-aws-credentials@v2
-      with:
-        role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
-        aws-region: eu-west-1
-
     - name: Test and build
       run: |
         sbt clean compile test universal:packageBin
 
     - name: Upload to riff-raff
-      uses: guardian/actions-riff-raff@v3
+      uses: guardian/actions-riff-raff@v4
       with:
         githubToken: ${{ secrets.GITHUB_TOKEN }}
+        roleArn: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
         configPath: riff-raff.yaml
         projectName: Editorial Tools::sponsorship-expiry-email-lambda
         buildNumberOffset: 37 # This is the last build number from TeamCity
