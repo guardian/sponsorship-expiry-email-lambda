@@ -12,7 +12,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-lambda" % AwsSdkVersion,
   "com.amazonaws" % "aws-java-sdk-sts" % AwsSdkVersion,
   "com.amazonaws" % "aws-java-sdk-ses" % AwsSdkVersion,
-  "com.squareup.okhttp3" % "okhttp" % "3.6.0",
+  "com.squareup.okhttp3" % "okhttp" % "4.9.2",
   "com.gu" %% "scanamo" % "1.0.0-M4"
 )
 
