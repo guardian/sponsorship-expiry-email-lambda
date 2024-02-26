@@ -19,6 +19,8 @@ libraryDependencies ++= Seq(
  topLevelDirectory in Universal := None
  packageName in Universal := normalizedName.value
 
+dependencyOverrides += "org.jetbrains.kotlin" % "kotlin-stdlib" % "[1.6.0,)"
+
 TwirlKeys.templateImports += "com.gu.comdev.sponsorshipexpiry.models._"
 TwirlKeys.templateImports += "org.joda.time.format.DateTimeFormat"
 TwirlKeys.templateImports += "org.joda.time.DateTime"
