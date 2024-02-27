@@ -83,7 +83,7 @@ Resources:
       Handler : com.gu.comdev.sponsorshipexpiry.Lambda::handleRequest
       MemorySize : 512
       Role: !GetAtt SponsorshipExpiryEmailLambdaRole.Arn
-      Runtime : java8
+      Runtime : java11
       Timeout : 180
       VpcConfig:
         SecurityGroupIds: [ !Ref SponsorshipExpiryEmailLambdaSecurityGroup ]

@@ -13,6 +13,6 @@ jobs:
       DEBUG: true
       ORG: guardian
       SKIP_NODE: true
-      JAVA_VERSION: 8
+      JAVA_VERSION: 11
     secrets:
        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
