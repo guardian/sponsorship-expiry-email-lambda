@@ -6,18 +6,20 @@ name := "sponsorship-expiry-email-lambda"
 
 enablePlugins(SbtTwirl, JavaAppPackaging)
 
-val AwsSdkVersion = "1.12.329"
+val AwsSdkVersion = "1.12.666"
 
 libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-lambda" % AwsSdkVersion,
   "com.amazonaws" % "aws-java-sdk-sts" % AwsSdkVersion,
   "com.amazonaws" % "aws-java-sdk-ses" % AwsSdkVersion,
-  "com.squareup.okhttp3" % "okhttp" % "3.6.0",
+  "com.squareup.okhttp3" % "okhttp" % "4.9.2",
   "com.gu" %% "scanamo" % "1.0.0-M4"
 )
 
  topLevelDirectory in Universal := None
  packageName in Universal := normalizedName.value
+
+dependencyOverrides += "org.jetbrains.kotlin" % "kotlin-stdlib" % "[1.6.0,)"
 
 TwirlKeys.templateImports += "com.gu.comdev.sponsorshipexpiry.models._"
 TwirlKeys.templateImports += "org.joda.time.format.DateTimeFormat"
