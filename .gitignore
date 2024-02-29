@@ -5,3 +5,4 @@ project/project
 logs/
 project/target
 target
+.bsp/

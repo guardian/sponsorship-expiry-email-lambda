@@ -1,6 +1,6 @@
 organization  := "com.gu"
 description   := "AWS Lambda to send email to stakeholders for expired sponsorships."
-scalaVersion  := "2.12.4"
+scalaVersion  := "2.12.19"
 scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-target:jvm-1.8", "-Xfatal-warnings")
 name := "sponsorship-expiry-email-lambda"
 
@@ -16,8 +16,8 @@ libraryDependencies ++= Seq(
   "com.gu" %% "scanamo" % "1.0.0-M4"
 )
 
- topLevelDirectory in Universal := None
- packageName in Universal := normalizedName.value
+Universal / topLevelDirectory := None
+Universal / packageName := normalizedName.value
 
 dependencyOverrides += "org.jetbrains.kotlin" % "kotlin-stdlib" % "[1.6.0,)"
 
@@ -27,6 +27,6 @@ TwirlKeys.templateImports += "org.joda.time.DateTime"
 
 initialize := {
   val _ = initialize.value
-  assert(sys.props("java.specification.version") == "1.8",
-    "Java 8 is required for this project.")
+  assert(sys.props("java.specification.version").toInt >= 11,
+    "Java 11 is required for this project.")
 }
