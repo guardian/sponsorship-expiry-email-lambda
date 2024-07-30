@@ -1,6 +1,6 @@
 organization  := "com.gu"
 description   := "AWS Lambda to send email to stakeholders for expired sponsorships."
-scalaVersion  := "2.12.19"
+scalaVersion  := "2.13.14"
 scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-target:jvm-1.8", "-Xfatal-warnings")
 name := "sponsorship-expiry-email-lambda"
 
