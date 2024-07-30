@@ -14,7 +14,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-ses" % AwsSdkVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % AwsSdkVersion,
   "com.squareup.okhttp3" % "okhttp" % "4.9.2",
-  "com.gu" %% "scanamo" % "1.0.0-M4"
+  "com.gu" %% "scanamo" % "1.0.0-M8"
 )
 
 Universal / topLevelDirectory := None
