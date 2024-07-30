@@ -1,6 +1,6 @@
 organization  := "com.gu"
 description   := "AWS Lambda to send email to stakeholders for expired sponsorships."
-scalaVersion  := "2.12.19"
+scalaVersion  := "2.13.14"
 scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-target:jvm-1.8", "-Xfatal-warnings")
 name := "sponsorship-expiry-email-lambda"
 
@@ -13,8 +13,8 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-sts" % AwsSdkVersion,
   "com.amazonaws" % "aws-java-sdk-ses" % AwsSdkVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % AwsSdkVersion,
-  "com.squareup.okhttp3" % "okhttp" % "4.9.2",
-  "com.gu" %% "scanamo" % "1.0.0-M4"
+  "com.squareup.okhttp3" % "okhttp" % "4.9.3",
+  "com.gu" %% "scanamo" % "1.0.0-M8"
 )
 
 Universal / topLevelDirectory := None
