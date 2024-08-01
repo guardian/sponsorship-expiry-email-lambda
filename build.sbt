@@ -21,6 +21,7 @@ Universal / topLevelDirectory := None
 Universal / packageName := normalizedName.value
 
 dependencyOverrides += "org.jetbrains.kotlin" % "kotlin-stdlib" % "[1.6.0,)"
+dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-core" % "[2.16,)"
 
 TwirlKeys.templateImports += "com.gu.comdev.sponsorshipexpiry.models._"
 TwirlKeys.templateImports += "org.joda.time.format.DateTimeFormat"
