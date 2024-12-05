@@ -6,7 +6,7 @@ name := "sponsorship-expiry-email-lambda"
 
 enablePlugins(SbtTwirl, JavaAppPackaging)
 
-val AwsSdkVersion = "1.12.766"
+val AwsSdkVersion = "1.12.767"
 
 libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-lambda" % AwsSdkVersion,
