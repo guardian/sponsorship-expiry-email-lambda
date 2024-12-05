@@ -1,8 +1,8 @@
 addSbtPlugin("org.scalariform" % "sbt-scalariform" % "1.8.3")
 
-addSbtPlugin("org.playframework.twirl" % "sbt-twirl" % "2.0.4")
+addSbtPlugin("org.playframework.twirl" % "sbt-twirl" % "2.0.7")
 
-addSbtPlugin("com.github.sbt" % "sbt-native-packager" % "1.9.16")
+addSbtPlugin("com.github.sbt" % "sbt-native-packager" % "1.10.0")
 
 addDependencyTreePlugin
 
